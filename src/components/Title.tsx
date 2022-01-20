@@ -8,8 +8,13 @@ const Text = styled.div`
   font-family: Inter;
   line-height: auto;
   color: #7f7b7b;
+  padding: 10px;
 `;
 
-export default function Title() {
-  return <Text>Todo Calendar</Text>;
+type TProps = {
+  text: string;
+};
+
+export default function Title({ text }: TProps) {
+  return <Text>{text}</Text>;
 }
