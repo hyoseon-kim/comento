@@ -1,5 +1,7 @@
 import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { viewState } from "../state/viewState";
 import ModifyBox from "./ModifyBox";
 import RegisterBox from "./RegisterBox";
 import Title from "./Title";
@@ -19,19 +21,34 @@ const Box = styled.div`
   background-color: #f2f2f2;
 `;
 
-enum BoxTypes {
-  View,
-  Modify,
-  Register,
+export enum BoxTypes {
+  View = "view",
+  Modify = "modify",
+  Register = "register",
 }
 
+const BoxComponent = {
+  [BoxTypes.View]: ViewBox,
+  [BoxTypes.Register]: RegisterBox,
+  [BoxTypes.Modify]: ModifyBox,
+};
+
 const SideBar: React.VFC = () => {
-  let boxType = <ViewBox />;
+  const view = useRecoilValue(viewState);
+  const Component = BoxComponent[view as BoxTypes];
+  const today = new Date();
 
   return (
     <Container>
-      <Title text="Todo Calendar" />
-      <Box>{boxType}</Box>
+      <Title
+        text={`Todo Calendar ${today.getFullYear()}/0${
+          today.getMonth() + 1
+        }/0${today.getDate()}
+        `}
+      />
+      <Box>
+        <Component />
+      </Box>
     </Container>
   );
 };
